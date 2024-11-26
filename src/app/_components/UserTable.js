@@ -1,14 +1,19 @@
-import React, { useState } from "react";
-import { users as mockUsers } from "../_data/mockData";
+import React, { useState, useEffect } from "react";
 import Pagination from "./Pagination";
 
-const UserTable = () => {
-  const [users, setUsers] = useState(mockUsers);
+const UserTable = ({ users, setUsers }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  // Ensure that the users passed into this component are the original, unfiltered users
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const paginatedUsers = users.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -42,21 +47,15 @@ const UserTable = () => {
     );
   };
 
-  const totalPages = Math.ceil(users.length / itemsPerPage);
-  const paginatedUsers = users.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
   return (
-    <div className="container px-20 pt-10 h-full w-full">
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[500px]">
+    <div className="container px-20 h-full w-full">
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="sticky top-0 bg-gray-50 dark:bg-gray-700 text-xs text-gray-700 uppercase dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-4 py-3">
                 <input
@@ -65,24 +64,15 @@ const UserTable = () => {
                   onChange={handleSelectAll}
                 />
               </th>
-              <th scope="col" className="px-6 py-3">
-                ID
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Role
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Status
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
+              <th scope="col" className="px-6 py-3">ID</th>
+              <th scope="col" className="px-6 py-3">Name</th>
+              <th scope="col" className="px-6 py-3">Email</th>
+              <th scope="col" className="px-6 py-3">Role</th>
+              <th scope="col" className="px-6 py-3">Status</th>
+              <th scope="col" className="px-6 py-3">Action</th>
             </tr>
           </thead>
-          <tbody className="overflow-y-auto">
+          <tbody>
             {paginatedUsers.map((user) => (
               <tr
                 key={user.id}
@@ -97,21 +87,16 @@ const UserTable = () => {
                 </td>
                 <td className="px-6 py-4">{user.id}</td>
                 <td className="px-6 py-4">{user.name}</td>
+                <td className="px-6 py-4">{user.email}</td>
                 <td className="px-6 py-4">
                   <select
                     value={user.role}
                     onChange={(e) => handleRoleChange(user.id, e.target.value)}
                     className="block w-full p-2 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   >
-                    <option className="text-center" value="Admin">
-                      Admin
-                    </option>
-                    <option className="text-center" value="Editor">
-                      Editor
-                    </option>
-                    <option className="text-center" value="Viewer">
-                      Viewer
-                    </option>
+                    <option className="text-center" value="Admin">Admin</option>
+                    <option className="text-center" value="Editor">User</option>
+                    <option className="text-center" value="Viewer">Manager</option>
                   </select>
                 </td>
                 <td className="px-6 py-4">
@@ -122,15 +107,9 @@ const UserTable = () => {
                     }
                     className="block w-full p-2 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   >
-                    <option className="text-center" value="Active">
-                      Active
-                    </option>
-                    <option className="text-center" value="Inactive">
-                      Inactive
-                    </option>
-                    <option className="text-center" value="Pending">
-                      Pending
-                    </option>
+                    <option className="text-center" value="Active">Active</option>
+                    <option className="text-center" value="Inactive">Inactive</option>
+                    <option className="text-center" value="Pending">Pending</option>
                   </select>
                 </td>
                 <td className="px-6 py-4 flex justify-center items-center">
