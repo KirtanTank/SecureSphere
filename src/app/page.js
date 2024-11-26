@@ -18,7 +18,7 @@ export default function Home() {
   const [permissions, setPermissions] = useState(mockPermissions);
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-200">
       <Header
         setOpenAddUserModal={setOpenAddUserModal}
         setOpenAddRoleModal={setOpenAddRoleModal}
@@ -38,7 +38,7 @@ export default function Home() {
         setOpenAddRoleModal={setOpenAddRoleModal}
       />
       <UserDataMutation setUsers={setUsers} roles={roles} />
-      <UserTable users={users} setUsers={setUsers} />
+      <UserTable users={users} setUsers={setUsers} roles={roles} />
     </div>
   );
 }

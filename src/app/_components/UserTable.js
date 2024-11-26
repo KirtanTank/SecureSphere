@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "./Pagination";
 
-const UserTable = ({ users, setUsers }) => {
+const UserTable = ({ users, setUsers, roles }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Ensure that the users passed into this component are the original, unfiltered users
   const totalPages = Math.ceil(users.length / itemsPerPage);
   const paginatedUsers = users.slice(
     (currentPage - 1) * itemsPerPage,
@@ -94,9 +93,11 @@ const UserTable = ({ users, setUsers }) => {
                     onChange={(e) => handleRoleChange(user.id, e.target.value)}
                     className="block w-full p-2 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   >
-                    <option className="text-center" value="Admin">Admin</option>
-                    <option className="text-center" value="Editor">User</option>
-                    <option className="text-center" value="Viewer">Manager</option>
+                    {roles.map((role, index) => (
+                      <option key={index} value={role.name}>
+                        {role.name}
+                      </option>
+                    ))}
                   </select>
                 </td>
                 <td className="px-6 py-4">
